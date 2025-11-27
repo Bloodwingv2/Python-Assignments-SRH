@@ -20,6 +20,16 @@ def to_hours(time):
         
     return meetings_in_hours
 
+def concatenate_calendars(YourCalendar, YourCoWorkersCalendar):
+    """Concatenate both calendars into one for processing/comparison"""
+    merged_calendar = YourCalendar + YourCoWorkersCalendar
+    for meeting in merged_calendar:
+        start = meeting[0]  # Get first element
+        end = meeting[1]    # Get second element
+        res.append([to_minutes(start), to_minutes(end)])
+    
+    return res
+
 def merge_time(time):
     """Merge overlapping time slots in the calendar"""
     compare_variable = [time[0]] # keep it as lists of lists for iteration
@@ -62,14 +72,6 @@ YourCoWorkersWorkingHours = ['10:00', '18:30']
 meetingDuration = 30
 
 if __name__ == "__main__":
-    
-    merged_calendar = YourCalendar + YourCoWorkersCalendar
-    for meeting in merged_calendar:
-        start = meeting[0]  # Get first element
-        end = meeting[1]    # Get second element
-        res.append([to_minutes(start), to_minutes(end)])
-    
-    
     
     res = concatenate_calendars(YourCalendar, YourCoWorkersCalendar) # First things first lets concatenate both calendars so that we can properly process them
     res.sort() # sort the merged calendar using standard sort to avoid inconsistencies and easier linear processing
