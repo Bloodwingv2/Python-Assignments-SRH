@@ -1,96 +1,93 @@
 def to_minutes(time):
     """Converts time in String to minutes as int for comparisons"""
-    parts = time.split(':')    # we split "9:30" into ['9', '30'] as its a string and we can't use strings for comparison 
-    hours = int(parts[0])      # Store first part i.e: '9' → 9 as an int
-    mins = int(parts[1])       # Get second part: '30' → 30 and store it as int as well
-    
-    return hours * 60 + mins 
+    parts = time.split(':')
+    hours = int(parts[0])
+    mins = int(parts[1])
+    return hours * 60 + mins
+    # Time Complexity: O(1) | Space Complexity: O(1)
 
 def to_hours(time):
     """Converts time in minutes back to hours in string format"""
     meetings_in_hours = []
     for gaps in time:
-        start = gaps[0]  # Get first element
-        end = gaps[1]    # Get second element
-        hours_1 = start // 60
-        mins_1 = start % 60
-        hours_2 = end // 60
-        mins_2 = end % 60
-        meetings_in_hours.append([f"{hours_1}:{mins_1:02d}", f"{hours_2}:{mins_2:02d}"]) # use 02d to add zeros to mins
-        
+        start, end = gaps[0], gaps[1]
+        hours_1, mins_1 = start // 60, start % 60
+        hours_2, mins_2 = end // 60, end % 60
+        meetings_in_hours.append([f"{hours_1}:{mins_1:02d}", f"{hours_2}:{mins_2:02d}"])
     return meetings_in_hours
+    # Time Complexity: O(n) | Space Complexity: O(n)
 
-def concatenate_calendars(YourCalendar, YourCoWorkersCalendar):
-    """Concatenate both calendars into one for processing/comparison"""
-    merged_calendar = YourCalendar + YourCoWorkersCalendar
+def concatenate_calendars(your_calendar, coworker_calendar):
+    """Concatenate both calendars into one for processing"""
+    merged_calendar = your_calendar + coworker_calendar
+    converted = []
     for meeting in merged_calendar:
-        start = meeting[0]  # Get first element
-        end = meeting[1]    # Get second element
-        res.append([to_minutes(start), to_minutes(end)])
-    
-    return res
+        start, end = meeting[0], meeting[1]
+        converted.append([to_minutes(start), to_minutes(end)])
+    return converted
+    # Time Complexity: O(n) | Space Complexity: O(n)
 
 def merge_time(time):
     """Merge overlapping time slots in the calendar"""
-    compare_variable = [time[0]] # keep it as lists of lists for iteration
+    if not time:
+        return []
+    compare_variable = [time[0]]
     for start, end in time[1:]:
-        compare_END = compare_variable[-1][1] # End of freshly added time
+        compare_END = compare_variable[-1][1]
         if start <= compare_END:
-            compare_variable[-1][1] = max(compare_END,end)
+            compare_variable[-1][1] = max(compare_END, end)
         else:
-            compare_variable.append([start,end])
-
+            compare_variable.append([start, end])
     return compare_variable
-        
-def meeting_scheduler(time, your_hours, coworker_hours):
-    """Find available meeting slots by subtracting end-times and by factoring both users working hours"""
+    # Time Complexity: O(n) | Space Complexity: O(n)
+
+def meeting_scheduler(time, your_hours, coworker_hours, meeting_duration):
+    """Find available meeting slots considering both users' working hours"""
     overlap_start = max(to_minutes(your_hours[0]), to_minutes(coworker_hours[0]))
     overlap_end = min(to_minutes(your_hours[1]), to_minutes(coworker_hours[1]))
     
     meetings = []
-    compare_variable = [time[0]]
     
-    for start, end in time[1:]:
-        compare_END = compare_variable[-1][1]
-        if start - compare_END >= meetingDuration:
-            meetings.append([compare_END, start])
-        compare_variable.append([start, end])
+    # Check gap before first meeting
+    if time and time[0][0] - overlap_start >= meeting_duration:
+        meetings.append([overlap_start, time[0][0]])
     
-    # Add final gap from last meeting to end of workday
-    last_meeting_end = compare_variable[-1][1]
-    if overlap_end - last_meeting_end >= meetingDuration:
-        meetings.append([last_meeting_end, overlap_end])
+    # Check gaps between meetings
+    for i in range(len(time) - 1):
+        gap_start = time[i][1]
+        gap_end = time[i + 1][0]
+        if gap_end - gap_start >= meeting_duration:
+            meetings.append([gap_start, gap_end])
+    
+    # Check gap after last meeting
+    if time and overlap_end - time[-1][1] >= meeting_duration:
+        meetings.append([time[-1][1], overlap_end])
     
     return meetings
+    # Time Complexity: O(n) | Space Complexity: O(n)
 
-
-res = []
-YourCalendar = [['9:00', '10:30'], ['12:00', '13:00'], ['16:00', '18:00']]
-YourWorkingHours = ['9:00', '20:00']
-YourCoWorkersCalendar = [['10:00', '11:30'], ['12:30', '14:30'], ['14:30','15:00'], ['16:00', '17:00']]
-YourCoWorkersWorkingHours = ['10:00', '18:30']
-meetingDuration = 30
-
+# ============ MAIN EXECUTION ============
 if __name__ == "__main__":
+    your_calendar = [['9:00', '10:30'], ['12:00', '13:00'], ['16:00', '18:00']]
+    your_working_hours = ['9:00', '20:00']
+    coworker_calendar = [['10:00', '11:30'], ['12:30', '14:30'], ['14:30', '15:00'], ['16:00', '17:00']]
+    coworker_working_hours = ['10:00', '18:30']
+    meeting_duration = 30
     
-    res = concatenate_calendars(YourCalendar, YourCoWorkersCalendar) # First things first lets concatenate both calendars so that we can properly process them
-    res.sort() # sort the merged calendar using standard sort to avoid inconsistencies and easier linear processing
-    res = merge_time(res) # Now we merge the overlapping time slots in the merged calendar to get proper busy slots for both users
-    res = meeting_scheduler(res, YourWorkingHours, YourCoWorkersWorkingHours) # Finally we find the gaps in between the merged calendar considering both users working hours
-    res = to_hours(res) # As the output is required in a hours format we can just reverse the process of converting to minutes back to hours
-    print(res) # print the final result
+    merged = concatenate_calendars(your_calendar, coworker_calendar)
+    merged.sort()
+    merged = merge_time(merged)
+    available = meeting_scheduler(merged, your_working_hours, coworker_working_hours, meeting_duration)
+    result = to_hours(available)
+    print(result)
 
+# ============ TIME COMPLEXITY ANALYSIS ============
+# to_minutes():           O(1) - constant time operations
+# to_hours():             O(n) - iterate through n meetings
+# concatenate_calendars(): O(n) - iterate through n total meetings
+# merge_time():           O(n) - iterate through n meetings
+# meeting_scheduler():    O(n) - iterate through n meetings
 
-    
-    
-""" Legacy code for meeting_scheduler function without working hours consideration
-def meeting_scheduler(time):
-    meetings = []
-    compare_variable = [time[0]] # keep it as lists of lists for iteration
-    for start, end in time[1:]:
-        compare_END = compare_variable[-1][1] # End of freshly added time
-        if start - compare_END >= meetingDuration:
-            meetings.append([compare_END, start])
-            compare_variable.append([start,end])
-
-    return meetings"""
+#============ OVERALL COMPLEXITY ANALYSIS ============
+# Overall:                O(n log n) - dominated by sort() operation in main execution but as we need a sorted list to mitgate the concatenation usage, it's necessary 
+# Space Complexity:       O(n) - storing merged calendar

@@ -1,7 +1,7 @@
 import heapq
 
 def heap_solution(boxes):
-    boxes = boxes.copy()  # Create a copy to avoid modifying original
+    #boxes = boxes.copy()  # Create a copy to avoid modifying original
     res = [boxes[0]]
     heapq.heapify(res)
 
@@ -37,7 +37,7 @@ def greedy_solution(boxes):
 
 if __name__ == "__main__":
     Input = [[2, 1, 2], [3, 2, 3], [2, 2, 8], [2, 3, 4], [1, 3, 1], [4, 4, 5]]
-    print(greedy_solution(Input))
+    #print(greedy_solution(Input))
     print(heap_solution(Input))
 
 # Time complexity analysis
