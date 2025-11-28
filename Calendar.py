@@ -122,7 +122,7 @@ if __name__ == "__main__":
 # - Python’s Timsort runs in O(n log n) in the average and worst case.
 # - Required to ensure merge_time() works correctly since it relies on sorted intervals.
 # Time Complexity: O(n log n)
-# Space Complexity: O(n) (Timsort requires additional memory)
+# Space Complexity: O(n) 
 
 # merge_time():
 # - Iterates once through the sorted list of meetings.
