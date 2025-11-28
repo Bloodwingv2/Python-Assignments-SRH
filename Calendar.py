@@ -1,3 +1,18 @@
+# Exercise 1 – Calendar
+# Data Structure: LIST
+
+# Initial Thoughts:
+# - Initially considered using sets and intersection logic to find common free gaps,
+#   but this approach did not work effectively in practice. 
+
+# Approach:
+# - Merged both calendars to identify all gaps between existing meetings.
+# - Subtracted these gaps to determine available meeting slots of the required duration.
+
+# Additional Considerations:
+# - Working hours for both users were not included at first; these were added later, when i realized my mistake.
+#   The current solution provides all valid solutions for any input.
+
 def to_minutes(time):
     """Converts time in String to minutes as int for comparisons"""
     parts = time.split(':')
@@ -81,13 +96,67 @@ if __name__ == "__main__":
     result = to_hours(available)
     print(result)
 
-# ============ TIME COMPLEXITY ANALYSIS ============
-# to_minutes():           O(1) - constant time operations
-# to_hours():             O(n) - iterate through n meetings
-# concatenate_calendars(): O(n) - iterate through n total meetings
-# merge_time():           O(n) - iterate through n meetings
-# meeting_scheduler():    O(n) - iterate through n meetings
+# ============ TIME COMPLEXITY ANALYSIS PER FUNCTION ============
+# to_minutes():
+# - Performs a constant number of string operations and arithmetic conversions.
+# - No loops, no recursion, no additional data structures.
+# Time Complexity: O(1)
+# Space Complexity: O(1)
+
+# to_hours():
+# - Loops through the list of 'n' time-interval pairs.
+# - Each iteration does constant-time arithmetic (division/modulo) and formatting.
+# - Builds a new list of size 'n', so extra memory grows linearly with input.
+# Time Complexity: O(n)
+# Space Complexity: O(n)
+
+# concatenate_calendars():
+# - Creates a single combined list of all meetings (let total = n).
+# - Loop runs once per meeting and converts each start/end using to_minutes(), which is O(1).
+# - Memory also grows linearly because we store all converted intervals.
+# Time Complexity: O(n)
+# Space Complexity: O(n)
+
+# sort():
+# - Sorting the merged calendar is the heaviest operation in the entire pipeline.
+# - Python’s Timsort runs in O(n log n) in the average and worst case.
+# - Required to ensure merge_time() works correctly since it relies on sorted intervals.
+# Time Complexity: O(n log n)
+# Space Complexity: O(n) (Timsort requires additional memory)
+
+# merge_time():
+# - Iterates once through the sorted list of meetings.
+# - Each comparison and merge decision is constant time.
+# - Produces a new list of merged intervals with a worst-case size of n.
+# Time Complexity: O(n)
+# Space Complexity: O(n)
+
+# meeting_scheduler():
+# - Runs a single pass through the merged calendar.
+# - Checks gaps between adjacent meetings (n – 1 gaps total).
+# - Appends valid slots into a result list, growing at most to O(n).
+# Time Complexity: O(n)
+# Space Complexity: O(n)
+
 
 #============ OVERALL COMPLEXITY ANALYSIS ============
-# Overall:                O(n log n) - dominated by sort() operation in main execution but as we need a sorted list to mitgate the concatenation usage, it's necessary 
-# Space Complexity:       O(n) - storing merged calendar
+# The dominant term across all steps is the sorting operation.
+
+# Therefore:
+# Overall Time Complexity: O(n log n)
+# - Everything else is linear, but as we are concatenating and BECAUSE of our algorithm design assuming the list is sorted
+#   we must sort the merged calendar first.
+
+# Overall Space Complexity: O(n)
+# - We store multiple lists (merged, converted, merged-again, final gaps), all proportional to n.
+# - No extra memory beyond linear usage.
+
+#============ THOUGHT PROCESS ============
+# Algorithm rundown:
+# Basically we merge both calendars into one, sort them, merge overlapping meetings, and then find gaps that fit the meeting duration within overlapping working hours.
+# to perform this we retain one element in another variable for comparison which is why concatenating the list proves very useful here and a condensed list helps us even more.
+
+# Final Thoughts (not part of code):
+# Regarding Python's slicing operation i have heard the operation itself creates a copy of the list could it impact a space of a list?
+# The question itself is very interesting as i have solved questions regarding gaps before but i have never encountered a question where multiple stages are combined
+# My first few minutes were spent scratching my head as the input was in a string format and i couldn't perform any conversions until i realised i had to convert them into minutes
