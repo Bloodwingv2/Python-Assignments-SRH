@@ -2,14 +2,14 @@
 # Data Structure: Stack
 
 # Initial Thoughts:
+# Initially considerd using a heap to manage and auto sort the disks but in practice it made more sense 
+# to use a stack to keep track of the best possible combinations, as we need to constantly check all possibilities to attain all combinations.
 
 # Approach:
-# - Initially i thought a simple heap would do the trick we could use if statements and keep adding elements to the heap and due to its auto-sort abilities in python we can enjoy a lower time complexity but as the input is a tuple here suddenly the question becomes overly complex
-# i figured that the question structure is to figure out all the possibilities again and again to maintain optimal size hmm
-# lets try using max operator.
-
-# Additional Considerations:
-# - placeholder
+# -Initially i thought a simple heap would do the trick we could use if statements and keep adding elements to the heap and due to its auto-sort abilities in python we can enjoy a lower time complexity 
+# but as the input is a tuple here, with complex parameters and constraints it made more sense to use a stack.
+# Going with this intuition i realized i had to scan through all disks again and again using nested loops to get our desired output.
+# similar to how we store a maximum in 1-d arrays we store the best stack in the stack itself, pretty neat right?
 
 
 def disk_optimize(disks):
@@ -42,13 +42,32 @@ def disk_optimize(disks):
 
 if __name__ == "__main__":
     
-    Input = [
-    [2, 2, 5],   # Disk A: height 5
-    [3, 3, 4],   # Disk B: height 4
-    [4, 4, 1],   # Disk C: height 1
-    [3, 3, 5],   # Disk D: height 5 (same height as A)
-]
-    Sample_Output = [[4, 4, 5], [3, 2, 3], [2, 1, 2]]
-    
+    Input = [[2, 1, 2], [3, 2, 3], [2, 2, 8], [2, 3, 4], [1, 3, 1], [4, 4, 5]]
     result = disk_optimize(Input)
     print(result)
+
+# ============ TIME COMPLEXITY ANALYSIS PER FUNCTION ============
+# disk_optimize():
+# - Outer loop iterates through all disks as starting points: O(n)
+# - Inner loop iterates through remaining disks to build stack: O(n)
+# - Inside inner loop:
+#     * Comparison and append operations are O(1)
+#     * Reversing the stack when updating best_stacks: O(n)
+#     * Concatenating to best_stacks: O(n) in worst case
+
+# Time Complexity:
+# - Best Case: O(n^2)
+#   * If disks cannot stack (few comparisons succeed), and no max ties occur
+# - Worst Case: O(n^3)
+#   * If most disks can stack, and multiple stacks tie for max height, then we will see lots of stack reversals and concatenations
+
+# Space Complexity:
+# - Best Case: O(n)
+#   * Only one stack is stored at a time, few disks in stack
+# - Worst Case: O(n^2)
+#   * Many stacks tie for max height, each up to n disks
+
+# Final thoughts:
+# In problems where every single possibility needs to be checked, a nested loop approach is often necessary. although
+# usage of other data structures like can also help with discovering every single possibility but in this case,
+# i believe the code in this particular case is highly readdable which satisfies our use-case.
