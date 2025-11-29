@@ -1,5 +1,6 @@
 # Exercise 2 – Disk.py
-# Data Structure: Stack
+# Data Structure used: Stack
+# Python Version used: 3.13.3
 
 # Initial Thoughts:
 # Initially considerd using a heap to manage and auto sort the disks but in practice it made more sense 

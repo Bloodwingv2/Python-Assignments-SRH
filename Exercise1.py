@@ -1,5 +1,6 @@
 # Exercise 1 – Calendar
-# Data Structure: LIST
+# Data Structure used: LIST
+# Python Version used: 3.13.3
 
 # Initial Thoughts:
 # - Initially considered using sets and intersection logic to find common free gaps,
