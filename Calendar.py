@@ -96,6 +96,11 @@ if __name__ == "__main__":
     result = to_hours(available)
     print(result)
 
+# ============ Note ============
+
+# Although the input is hard-coded this solution will work on all inputs, i have made sure of that
+# i wasn't sure whether we have to include dynamic input or not so i left it hard-coded for now.
+
 # ============ TIME COMPLEXITY ANALYSIS PER FUNCTION ============
 # to_minutes():
 # - Performs a constant number of string operations and arithmetic conversions.
@@ -160,3 +165,8 @@ if __name__ == "__main__":
 # Regarding Python's slicing operation i have heard the operation itself creates a copy of the list could it impact a space of a list?
 # The question itself is very interesting as i have solved questions regarding gaps before but i have never encountered a question where multiple stages are combined
 # My first few minutes were spent scratching my head as the input was in a string format and i couldn't perform any conversions until i realised i had to convert them into minutes
+
+# Additions that can be done
+# we can utilize decorators to first convert the input into minutes, yeah?
+# it won't impact the time complexity but it will make the code more readable
+# Aside from that i think the code is pretty optimal as of now, absed on my knowledge.

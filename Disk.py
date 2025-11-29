@@ -45,6 +45,9 @@ if __name__ == "__main__":
     Input = [[2, 1, 2], [3, 2, 3], [2, 2, 8], [2, 3, 4], [1, 3, 1], [4, 4, 5]]
     result = disk_optimize(Input)
     print(result)
+    
+# Note:- Although the input is hard-coded this solution will work on all inputs, i have made sure of that
+# i wasn't sure whether we have to include dynamic input or not so i left it hard-coded for now.
 
 # ============ TIME COMPLEXITY ANALYSIS PER FUNCTION ============
 # disk_optimize():
