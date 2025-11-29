@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
 # sort():
 # - Sorting the merged calendar is the heaviest operation in the entire pipeline.
-# - Python’s Timsort runs in O(n log n) in the average and worst case.
+# - Python's Timsort runs in O(n log n) in the average and worst case.
 # - Required to ensure merge_time() works correctly since it relies on sorted intervals.
 # Time Complexity: O(n log n)
 # Space Complexity: O(n) 
@@ -156,6 +156,30 @@ if __name__ == "__main__":
 # - We store multiple lists (merged, converted, merged-again, final gaps), all proportional to n.
 # - No extra memory beyond linear usage.
 
+#============ WORST-CASE TIME COMPLEXITY ANALYSIS ============
+# Worst-case scenario occurs when:
+# 1. Both calendars are completely full with non-overlapping meetings
+# 2. Maximum number of meetings requiring full traversal and merge operations
+# 3. All meetings need individual processing without early termination
+
+# Breakdown of worst-case per function:
+# - to_minutes(): O(1) - constant regardless of input
+# - to_hours(): O(n) - must process every available slot
+# - concatenate_calendars(): O(n) - must convert every meeting
+# - sort(): O(n log n) - worst case for python sort on n elements
+# - merge_time(): O(n) - must check every meeting even if none overlap
+# - meeting_scheduler(): O(n) - must examine every gap between meetings
+
+# Worst-Case Overall Time Complexity: O(n log n)
+# - The sorting step dominates regardless of input distribution
+# - Even with pre-sorted input, our algorithm still sorts (could be optimized)
+# - No best-case optimization implemented (e.g., checking if already sorted)
+
+# Worst-Case Overall Space Complexity: O(n)
+# - Maximum space when no meetings overlap, resulting in n merged intervals
+# - All gaps between meetings are valid, creating n available slots
+# - Multiple intermediate lists exist simultaneously before garbage collection
+
 #============ THOUGHT PROCESS ============
 # Algorithm rundown:
 # Basically we merge both calendars into one, sort them, merge overlapping meetings, and then find gaps that fit the meeting duration within overlapping working hours.
@@ -169,4 +193,4 @@ if __name__ == "__main__":
 # Additions that can be done
 # we can utilize decorators to first convert the input into minutes, yeah?
 # it won't impact the time complexity but it will make the code more readable
-# Aside from that i think the code is pretty optimal as of now, absed on my knowledge.
+# Aside from that i think the code is pretty optimal as of now, based on my knowledge.

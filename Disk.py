@@ -33,7 +33,7 @@ def disk_optimize(disks):
         # After all iterations are completed for inner loop check if the current stack is the best stack 
         if height > max_height: # Update best height like we do in 1-D arrays if new height is greater than max height, replace old stack with new valeus
             max_height = height
-            best_stacks = stack[::-1] # Reverse stack to have the smallest disk at the bottom
+            best_stacks = stack[::-1] # Reverse stack to have the smallest disk at the bottom and replace best_stacks with new stack
         elif height == max_height: # If height is equal to max height, we have found another optimal stack, add it to best stacks
             best_stacks += stack[::-1] # Reverse and add entire stack to the best_stacks as its a valid stack with the max height, removed append as it was adding additional brackets, this was a very annoying bug
                 
@@ -61,8 +61,9 @@ if __name__ == "__main__":
 # Time Complexity:
 # - Best Case: O(n^2)
 #   * If disks cannot stack (few comparisons succeed), and no max ties occur
-# - Worst Case: O(n^3)
-#   * If most disks can stack, and multiple stacks tie for max height, then we will see lots of stack reversals and concatenations
+# - Worst Case: O(n^2)
+#   * In worst case scenario we might have lots of disks stacking as they are the same height but these are additive operations 
+#  and will not impact the loop so we can have + 0(n) operations with reversals, concatenations but overall worst case would still be o(n^2)
 
 # Space Complexity:
 # - Best Case: O(n)
@@ -72,5 +73,5 @@ if __name__ == "__main__":
 
 # Final thoughts:
 # In problems where every single possibility needs to be checked, a nested loop approach is often necessary. although
-# usage of other data structures like can also help with discovering every single possibility but in this case,
-# i believe the code in this particular case is highly readdable which satisfies our use-case.
+# Usage of other data structures like dfs or bfs which also find possibilities can also help with discovering every single possibility. and could yield better time complexities, 
+# but i felt in this particular case, the code is highly readdable and not over-complicated which satisfies our use-case.
