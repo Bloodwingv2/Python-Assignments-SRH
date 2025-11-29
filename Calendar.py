@@ -171,14 +171,14 @@ if __name__ == "__main__":
 # - meeting_scheduler(): O(n) - must examine every gap between meetings
 
 # Worst-Case Overall Time Complexity: O(n log n)
-# - The sorting step dominates regardless of input distribution
-# - Even with pre-sorted input, our algorithm still sorts (could be optimized)
+# - The sorting step dominates regardless of input distribution which is 0(n log n) itself
+# - Even with pre-sorted input, my algorithm still sorts (could be optimized)
 # - No best-case optimization implemented (e.g., checking if already sorted)
 
 # Worst-Case Overall Space Complexity: O(n)
 # - Maximum space when no meetings overlap, resulting in n merged intervals
 # - All gaps between meetings are valid, creating n available slots
-# - Multiple intermediate lists exist simultaneously before garbage collection
+# So there is no difference in space complexity for worst case as we still all n intervals 
 
 #============ THOUGHT PROCESS ============
 # Algorithm rundown:
